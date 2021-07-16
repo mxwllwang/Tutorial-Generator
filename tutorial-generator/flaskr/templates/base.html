@@ -1,19 +1,21 @@
 <!doctype html>
-<title>My Webpage</title>
-<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}
+<title>{% block title %}{% endblock %} - Tutorial Generator</title>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+<h1>Menu</h1>
+<nav>
+  <h2>Tutorial Generator</h2>
+  <ul>
+    <li><a href="{{ url_for('main.id') }}">By ID</a></li>
+    <li><a href="{{ url_for('main.file') }}">By File</a></li>   
+  </ul>
+</nav>
 <section class="content">
   <header>
-    <h1>My header</h1>
-  </header>
-  <form>
-    <label for="error">Error ID:</label>
-    <br>
-    <input type="text" id="error" name="error" required>
-    <input type="submit" value="Generate">
-  </form>
-  <br>
+    {% block header %}{% endblock %}
+  </header> 
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
+  {% block content %}{% endblock %}
 </section>
 

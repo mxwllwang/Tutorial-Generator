@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, redirect, render_template
 
 # Factory function for creating an app (it returns app)
 def create_app(test_config=None):
@@ -26,8 +26,12 @@ def create_app(test_config=None):
 
     # now default page should say hello
     @app.route('/')
-    def hello():
-        return 'Tutorial Generator'
+    def index():
+        return redirect('/main')
+
+    @app.route('/main')
+    def home():
+        return render_template('base.html')
 
     # import database?
     from . import db

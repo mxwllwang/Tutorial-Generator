@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}By File{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" enctype=multipart/form-data>
+    <label for="lang">Language:</label>
+    <select name="lang" id="lang" required>
+      <option value="" disabled selected hidden>File type...</option>
+      <option value="java">Java</option>
+      <option value="python">Python</option>
+      <option value="c++">C++</option>
+    </select>
+    <input type="file" id="file" name="file" required>
+    <br><br>
+    <input type="submit" value="Generate!">
+  </form>
+{% endblock %}
