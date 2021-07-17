@@ -1,13 +1,11 @@
 import functools, sys, os
-from flask import Flask, Blueprint, flash, g, redirect, render_template, request, session, url_for, send_from_directory
+from flask import Flask, Blueprint, flash, g, redirect, render_template, request, session, url_for, send_from_directory, current_app
 from werkzeug.utils import secure_filename
 from flaskr.db import get_db
 # from werkzeug.security import check_password_hash, generate_password_hash
 
-UPLOAD_FOLDER = 'flaskr/uploads'
-
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = 'flaskr/uploads'
 
 bp = Blueprint('main', __name__, url_prefix='/main') # Declares blueprint
 
@@ -39,16 +37,6 @@ def id():
 
 def allowed_file(filename, extension):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() == extension
-
-# Downloadable files after upload??
-
-@app.route('/uploads/<name>')
-def download_file(name):
-    return send_from_directory(app.config["UPLOAD_FOLDER"], name)
-
-app.add_url_rule(
-    "/uploads/<name>", endpoint="download_file", build_only=True
-)
 
 @bp.route('/file', methods=('GET', 'POST'))
 def file():
@@ -82,10 +70,11 @@ def file():
             return redirect(request.url)
         if file and allowed_file(file.filename, allowed_extension):
             filename = secure_filename(file.filename)
+            print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print("Saved file successfully")
             # Downloads doesn't work yet
-            # return redirect(url_for('download_file', name=filename))
+            return redirect(url_for('download_file', name=filename))
         else:
             flash('Incorrect file extension')
             return redirect(request.url)
