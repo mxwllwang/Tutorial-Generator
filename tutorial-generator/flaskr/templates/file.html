@@ -16,6 +16,15 @@
     </select>
     <input type="file" id="file" name="file" required>
     <br><br>
-    <input type="submit" value="Generate!">
+    <input type="submit" name="download" value="Download">
+    <input type="submit" name="generate" value="Generate!">
   </form>
+  {% if submitted %}
+    <label>Error:</label>
+    {% if errors is not none %}
+      {% for error in errors %}
+        <p>{{ error['line'] }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endif %}
 {% endblock %}

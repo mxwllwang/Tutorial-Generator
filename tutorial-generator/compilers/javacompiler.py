@@ -1,6 +1,7 @@
 import sys
 import os
 import shutil
+from compilers.compiler_error import CompilerError
 
 directory = './compilers' # ?
 classpath = './sample-files' # currently using this
@@ -54,7 +55,9 @@ def java_compile(file):
             prob['type'] = problem.get('severity')
             print('\t', problem)
             print('\t', prob)
-            problems.append(prob)
+            error = CompilerError(prob)
+            problems.append(error)
+            # problems.append(prob)
 
         problemsInSrc['problems'] = problems
         print('\tproblemsInSrc ', problemsInSrc)

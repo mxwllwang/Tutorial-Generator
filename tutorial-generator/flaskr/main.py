@@ -2,6 +2,9 @@ import functools, sys, os
 from flask import Flask, Blueprint, flash, g, redirect, render_template, request, session, url_for, send_from_directory, current_app
 from werkzeug.utils import secure_filename
 from flaskr.db import get_db
+from compilers.compiler_error import CompilerError
+from compilers import javacompiler
+
 # from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -40,6 +43,8 @@ def allowed_file(filename, extension):
 
 @bp.route('/file', methods=('GET', 'POST'))
 def file():
+    submitted = False
+    errors = None # compilerError
     if request.method == 'POST':
 
         # parse file extension type
@@ -73,8 +78,14 @@ def file():
             print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print("Saved file successfully")
-            # Downloads doesn't work yet
-            return redirect(url_for('download_file', name=filename))
+            if request.form.get('download'):            
+                return redirect(url_for('download_file', name=filename)) # downloads the file
+            elif request.form.get('generate'):
+                submitted = True # Change submission status, enabling error and tutorial to be displayed
+                print(file.filename)
+                errors = javacompiler.java_compile(file.filename) # Inform Jinja of all the errors
+            else:
+                flash('An error occured')
         else:
             flash('Incorrect file extension')
             return redirect(request.url)
@@ -90,5 +101,12 @@ def file():
         #    tutorial = selected_row['tutorial']
         #    print(tutorial)
         
-    return render_template('file.html')
+    return render_template('file.html', submitted=submitted, errors=errors)
+
+@bp.route('/add', methods=('GET', 'POST'))
+def add():
+    if request.method == 'POST':
+        print ("add")
+        
+    return render_template('add.html')
             

@@ -5,7 +5,7 @@ class CompilerError:
     
     def __init__(self, problem):
         self.line = problem['line']
-        self.message = problem['message']
+        self.message = problem['msg']
         self.context = problem['context']
         self.type = problem['type']
 
