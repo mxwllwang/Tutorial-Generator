@@ -45,6 +45,7 @@ def allowed_file(filename, extension):
 def file():
     submitted = False
     errors = None # compilerError
+    filename = ""
     if request.method == 'POST':
 
         # parse file extension type
@@ -82,8 +83,7 @@ def file():
                 return redirect(url_for('download_file', name=filename)) # downloads the file
             elif request.form.get('generate'):
                 submitted = True # Change submission status, enabling error and tutorial to be displayed
-                print(file.filename)
-                errors = javacompiler.java_compile(file.filename) # Inform Jinja of all the errors
+                errors = javacompiler.java_compile(filename) # Inform Jinja of all the errors
             else:
                 flash('An error occured')
         else:
@@ -101,7 +101,7 @@ def file():
         #    tutorial = selected_row['tutorial']
         #    print(tutorial)
         
-    return render_template('file.html', submitted=submitted, errors=errors)
+    return render_template('file.html', filename=filename, submitted=submitted, errors=errors)
 
 @bp.route('/add', methods=('GET', 'POST'))
 def add():

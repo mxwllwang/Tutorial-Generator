@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 7/20/21, 1:04:27 AM PDT -->
+<!-- 7/31/21, 1:07:35 AM PDT -->
 <!DOCTYPE compiler PUBLIC "-//Eclipse.org//DTD Eclipse JDT 3.2.006 Compiler//EN" "http://www.eclipse.org/jdt/core/compiler_32_006.dtd">
 <compiler copyright="Copyright IBM Corp 2000, 2020. All rights reserved." name="Eclipse Compiler for Java(TM)" version="v20210609-0549, 3.26.0">
 	<command_line>
 		<argument value="-log"/>
 		<argument value="./compilers/log.xml"/>
-		<argument value="./sample-files/test.java"/>
+		<argument value="../sample-files/hello.java"/>
 	</command_line>
 	<options>
 		<option key="org.eclipse.jdt.core.compiler.annotation.inheritNullAnnotations" value="disabled"/>
@@ -159,44 +159,10 @@
 		<classpath id="JAR" path="/Users/mxwllwang/vlab/lib/ecj-4.20.jar"/>
 	</classpaths>
 	<sources>
-		<source path="/Users/mxwllwang/vlab/sample-files/test.java">
-			<problems errors="4" infos="0" problems="4" warnings="0">
-				<problem categoryID="20" charEnd="76" charStart="74" id="ParsingErrorInsertToComplete" line="4" problemID="1610612976" severity="ERROR">
-					<message value="Syntax error, insert &quot;. class&quot; to complete Expression"/>
-					<source_context sourceEnd="2" sourceStart="0" value="int = &quot;not an int&quot;;"/>
-					<arguments>
-						<argument value=". class"/>
-						<argument value="Expression"/>
-					</arguments>
-				</problem>
-				<problem categoryID="20" charEnd="102" charStart="102" id="ParsingErrorInsertToComplete" line="5" problemID="1610612976" severity="ERROR">
-					<message value="Syntax error, insert &quot;AssignmentOperator Expression&quot; to complete Assignment"/>
-					<source_context sourceEnd="0" sourceStart="0" value="2nonExistantMethod(4);"/>
-					<arguments>
-						<argument value="AssignmentOperator Expression"/>
-						<argument value="Assignment"/>
-					</arguments>
-				</problem>
-				<problem categoryID="20" charEnd="102" charStart="102" id="ParsingErrorInsertToComplete" line="5" problemID="1610612976" severity="ERROR">
-					<message value="Syntax error, insert &quot;;&quot; to complete Statement"/>
-					<source_context sourceEnd="0" sourceStart="0" value="2nonExistantMethod(4);"/>
-					<arguments>
-						<argument value=";"/>
-						<argument value="Statement"/>
-					</arguments>
-				</problem>
-				<problem categoryID="20" charEnd="165" charStart="165" id="ParsingErrorInsertToComplete" line="6" problemID="1610612976" severity="ERROR">
-					<message value="Syntax error, insert &quot;;&quot; to complete Statement"/>
-					<source_context sourceEnd="32" sourceStart="32" value="System.out.println(&quot;hello world&quot;)"/>
-					<arguments>
-						<argument value=";"/>
-						<argument value="Statement"/>
-					</arguments>
-				</problem>
-			</problems>
+		<source path="/Users/mxwllwang/vlab/sample-files/hello.java">
+			<classfile path="/Users/mxwllwang/vlab/sample-files/hello.class"/>
 		</source>
 	</sources>
 	<stats>
-		<problem_summary errors="4" infos="0" problems="4" tasks="0" warnings="0"/>
 	</stats>
 </compiler>

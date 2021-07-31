@@ -3,40 +3,48 @@ import os
 import shutil
 from compilers.compiler_error import CompilerError
 
-directory = './compilers' # ?
-classpath = './sample-files' # currently using this
-file = 'test.java' # name of java file
-filepath = classpath + '/' + file
+directory = './compilers' # place to put console, errorconsole, log.xml
+classpath = '../sample-files' # currently using this
+logpath = os.path.join(directory, 'log.xml')
+compilerpath = '../lib/ecj-4.20.jar'
 
 # Input: file, which is expected to be in ./sample-files
 # Output: a dict containing information about all the errors
 def java_compile(file):
 
+
+    filepath = os.path.join(classpath, file)
+
+    print('\tlogpath exists:', os.path.exists(logpath))
+    print('\tlogpath abspath', os.path.abspath(logpath))
+    print('\tfilepath exists:', os.path.exists(filepath))
+    print('\tfilepath abspath', os.path.abspath(filepath))
+    
+    print("\tfilepath = ", filepath)
     # the variables are set for other purposes, it should be self-explaining
     from subprocess import call
-    f = open(directory + '/' + 'console.log', "w")
-    fe =  open(directory + '/' + 'errorconsole.log', "w")
+    f = open(os.path.join(directory, 'console.log'), "w")
+    fe =  open(os.path.join(directory, 'errorconsole.log'), "w")
 
     print('\tCurrent working directory: ', os.getcwd())
     print('\tDirectory ', directory)
 
     # Try simplified version
-    print("java", "-jar", "./lib/ecj-4.20.jar", "-log", os.path.join(directory, "log.xml"), filepath)
-    tool = call(["java", "-jar", "./lib/ecj-4.20.jar", "-log", os.path.join(directory, "log.xml"), filepath], stdout=f, stderr=fe, cwd=os.getcwd())
+    print("java", "-jar", compilerpath, "-log", logpath, filepath)
+    tool = call(["java", "-jar", compilerpath, "-log", logpath, filepath], stdout=f, stderr=fe, cwd=os.getcwd())
 
     # tool = call(["java",  "-jar", "./lib/ecj-4.20.jar", "-source", "1.8", "-target", "1.8", "-encoding", "utf8", "-cp", classpath, "-log", os.path.join(directory, "log.xml"),  "-d",  directory, file]
     # , stdout=f, stderr=fe, cwd=os.getcwd())
 
     import xml.etree.ElementTree as ET
-    tree = ET.parse('./compilers/log.xml')
-    # tree = ET.parse(directory + "/log.xml")
+    print("\tlogpath =", logpath)
+    tree = ET.parse(logpath)
     root = tree.getroot()
     m = dict()
-    all = []
+    all_problems = []
 
     status = 'ok'
-
-    SEPARATOR = 'SEPARATOR'
+    SEPARATOR = '$'
 
     for src in root.findall('.//problems/..'):
         problemsInSrc = dict()
@@ -53,21 +61,21 @@ def java_compile(file):
             prob['msg'] = problem.find('message').get('value')
             prob['context'] = problem.find('source_context').get('value')
             prob['type'] = problem.get('severity')
-            print('\t', problem)
-            print('\t', prob)
+            # print('\t', problem)
+            # print('\t', prob)
             error = CompilerError(prob)
             problems.append(error)
             # problems.append(prob)
+        all_problems += problems
+        # problemsInSrc['problems'] = problems
+        # print('\tproblemsInSrc ', problemsInSrc)
 
-        problemsInSrc['problems'] = problems
-        print('\tproblemsInSrc ', problemsInSrc)
+        # all.append(problemsInSrc)
+    print(all_problems)
+    return all_problems
 
-        all.append(problemsInSrc)
-
-    m['status'] = status
-    m['src'] = all
-
-    print('\tm ', m)
-    
-    return m
+    # m['status'] = status
+    # m['src'] = all
+    # print('\tm ', m)
+    # return m
 

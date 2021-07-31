@@ -14,20 +14,5 @@
       <option value="c++">C++</option>
       <option value="text">Text</option>
     </select>
-    <input type="file" id="file" name="file" required>
-    <br><br>
-    <input type="submit" name="download" value="Download">
-    <input type="submit" name="generate" value="Generate!">
   </form>
-  {% if submitted %}
-    <label>Error:</label>
-    <p>{{ filename }}</p>
-    {% if errors is not none %}
-      {% for error in errors %}
-        <p>{{ error.get_error() }}</p>
-      {% endfor %}
-    {% else %}
-      <p>No compiler errors found</p>
-    {% endif %}
-  {% endif %}
 {% endblock %}
