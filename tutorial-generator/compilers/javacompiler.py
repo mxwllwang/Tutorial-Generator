@@ -12,9 +12,7 @@ compilerpath = '../lib/ecj-4.20.jar'
 # Output: a dict containing information about all the errors
 def java_compile(file):
 
-
     filepath = os.path.join(classpath, file)
-
     print('\tlogpath exists:', os.path.exists(logpath))
     print('\tlogpath abspath', os.path.abspath(logpath))
     print('\tfilepath exists:', os.path.exists(filepath))
@@ -31,6 +29,7 @@ def java_compile(file):
 
     # Try simplified version
     print("java", "-jar", compilerpath, "-log", logpath, filepath)
+    # jar file option -log
     tool = call(["java", "-jar", compilerpath, "-log", logpath, filepath], stdout=f, stderr=fe, cwd=os.getcwd())
 
     # tool = call(["java",  "-jar", "./lib/ecj-4.20.jar", "-source", "1.8", "-target", "1.8", "-encoding", "utf8", "-cp", classpath, "-log", os.path.join(directory, "log.xml"),  "-d",  directory, file]
@@ -57,6 +56,7 @@ def java_compile(file):
             if problem.get('severity') == 'ERROR': # Confirm that its a compiler error
                 status = 'compileerror'
 
+            prob['id'] = problem.get('problemID')
             prob['line'] = problem.get('line')
             prob['msg'] = problem.find('message').get('value')
             prob['context'] = problem.find('source_context').get('value')
