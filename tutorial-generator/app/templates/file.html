@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}By File{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" enctype=multipart/form-data>
+    <label for="lang">Language:</label>
+    <select name="lang" id="lang" required>
+      <option value="" disabled selected hidden>File type...</option>
+      <option value="java">Java</option>
+      <option value="python">Python</option>
+      <option value="c++">C++</option>
+      <option value="text">Text</option>
+    </select>
+    <input type="file" id="file" name="file" required>
+    <br><br>
+    <input type="submit" name="download" value="Download">
+    <input type="submit" name="generate" value="Generate!">
+  </form>
+  {% if submitted %}
+    <label>Error:</label>
+    <p>{{ filename }}</p>
+    {% if errors is not none %}
+      {% for error in errors %}
+        <p>{{ error.get_error() }}</p>
+      {% endfor %}
+    {% else %}
+      <p>No compiler errors found</p>
+    {% endif %}
+  {% endif %}
+{% endblock %}
