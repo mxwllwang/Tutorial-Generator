@@ -1,5 +1,7 @@
 # Don't track content of these folders
 sample-files/
+*.pyo
+*.pyc
 
 # tutorial-generator/flaskr/uploads has a separate 
 # .gitignore inside it to keep it as an empty directory
