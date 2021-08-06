@@ -9,7 +9,7 @@ def create_app(test_config=None):
         # SECRET_KEY='I\x8e\xe8H\x12\xf6\xe6Y\xcdc\xde\xaf{\x15\x08>',
         # SECRET_KEY='QdJIebhULdyw5PSZGjGoaA',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'), # path of SQLite database file
-        UPLOAD_FOLDER='app/uploads' # TODO: Db may not work yet. Will have to rerun flask init-db later
+        UPLOAD_FOLDER='../working-folders' # TODO: Db may not work yet. Will have to rerun flask init-db later
     )
     
     if test_config is None:
@@ -48,7 +48,7 @@ def create_app(test_config=None):
     def download_file(location, name):
         try:
             return send_from_directory(
-                os.path.abspath(os.path.join(app.config['UPLOAD_FOLDER'], location)), name, as_attachment=True
+                os.path.abspath(os.path.join(app.config['UPLOAD_FOLDER'], location), name, as_attachment=True
             )
         except:
             print("Failed send_from_directory, redirecting")
