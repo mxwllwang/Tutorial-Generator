@@ -3,16 +3,17 @@ import os
 import shutil
 from compilers.compiler_error import CompilerError
 
-directory = './compilers' # place to put console, errorconsole, log.xml
-classpath = '../sample-files' # currently using this
-logpath = os.path.join(directory, 'log.xml')
 compilerpath = '../lib/ecj-4.20.jar'
 
-# Input: file, which is expected to be in ./sample-files
+# Input:
+#   filepath - working-folder for specific user
+#   directory - place to put console, errorconsole, log.xml    
 # Output: a dict containing information about all the errors
-def java_compile(file):
-
-    filepath = os.path.join(classpath, file)
+def java_compile(filename, directory):
+    
+    logpath = os.path.join(directory, 'log.xml')
+    filepath = os.path.join(directory, filename)
+    
     print('\tlogpath exists:', os.path.exists(logpath))
     print('\tlogpath abspath', os.path.abspath(logpath))
     print('\tfilepath exists:', os.path.exists(filepath))

@@ -47,13 +47,14 @@ def create_app(test_config=None):
     @app.route('/uploads/<location>/<name>')
     def download_file(location, name):
         try:
+            print(os.path.abspath(os.path.join(app.config['UPLOAD_FOLDER'], location, name)))
             return send_from_directory(
-                os.path.abspath(os.path.join(app.config['UPLOAD_FOLDER'], location), name, as_attachment=True
+                os.path.abspath(os.path.join(app.config['UPLOAD_FOLDER'], location)), name, as_attachment=True
             )
         except:
             print("Failed send_from_directory, redirecting")
-            flash("Error 404: Download failed")
-            return redirect('/main/file')
+            flash("Download failed")
+            return redirect('/main/file')            
         return render_template('file.html')
 
     app.add_url_rule(

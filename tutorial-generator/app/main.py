@@ -9,7 +9,7 @@ import uuid
 app = Flask(__name__)
 bp = Blueprint('main', __name__, url_prefix='/main') # Declares blueprint
 
-app.config['UPLOAD_FOLDER'] = 'app/uploads'
+app.config['UPLOAD_FOLDER'] = '../working-folders'
 
 def establish_user():
     if 'user' not in session:   
@@ -99,7 +99,7 @@ def file():
                 return redirect(url_for('download_file', location=session['user'], name=filename)) # downloads the file
             elif request.form.get('generate'):
                 submitted = True # Change submission status, enabling error and tutorial to be displayed
-                errors = javacompiler.java_compile(filename) # Inform Jinja of all the errors
+                errors = javacompiler.java_compile(filename, upload_path) # Inform Jinja of all the errors
             else:
                 flash('An error occured')
         else:
