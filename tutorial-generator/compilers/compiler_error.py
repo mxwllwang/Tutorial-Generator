@@ -2,6 +2,8 @@ import sys
 
 # Represents one error message
 class CompilerError:
+
+    IgnoreCategoriesMask = 0xFFFFFF
     
     def __init__(self, problem):
         self.id = problem['id']
@@ -9,10 +11,30 @@ class CompilerError:
         self.message = problem['msg']
         self.context = problem['context']
         self.type = problem['type']
+        self.start = problem['charStart']
+        self.end = problem['charEnd']
 
     # print to console and return text representation of error message
     def get_error(self):
         error = self.id + ' (id): ' + 'On line ' + self.line + ', ' + self.message + ': ' + self.context + ' (' + self.type + ')' 
         print (error)
         return error
+
+    def get_id(self): # Return true ID of problem, without consideration of category
+        return CompilerError.IgnoreCategoriesMask & int(self.id)
+
+    def get_line(self):
+        return self.line
+
+    def get_message(self):
+        return self.message
+
+    def get_context(self):
+        return self.context
+
+    def get_start(self):
+        return self.start
+
+    def get_end(self):
+        return self.end
     

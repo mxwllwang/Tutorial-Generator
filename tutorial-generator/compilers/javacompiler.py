@@ -59,6 +59,8 @@ def java_compile(filename, directory):
 
             prob['id'] = problem.get('problemID')
             prob['line'] = problem.get('line')
+            prob['charStart'] = problem.get('charStart')
+            prob['charEnd'] = problem.get('charEnd')
             prob['msg'] = problem.find('message').get('value')
             prob['context'] = problem.find('source_context').get('value')
             prob['type'] = problem.get('severity')
