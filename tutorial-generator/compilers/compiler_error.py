@@ -13,13 +13,15 @@ class CompilerError:
         self.type = problem['type']
         self.start = problem['charStart']
         self.end = problem['charEnd']
+        self.args = problem['arguments']
 
-    # print to console and return text representation of error message
+    # Debugging purposes: print to console and return text representation of error message
     def get_error(self):
         error = self.id + ' (id): ' + 'On line ' + self.line + ', ' + self.message + ': ' + self.context + ' (' + self.type + ')' 
         print (error)
         return error
 
+    # return parsed ID
     def get_id(self): # Return true ID of problem, without consideration of category
         return CompilerError.IgnoreCategoriesMask & int(self.id)
 
@@ -37,4 +39,7 @@ class CompilerError:
 
     def get_end(self):
         return self.end
+
+    def get_args(self):
+        return self.args
     

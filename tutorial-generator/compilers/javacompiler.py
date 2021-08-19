@@ -57,28 +57,28 @@ def java_compile(filename, directory):
             if problem.get('severity') == 'ERROR': # Confirm that its a compiler error
                 status = 'compileerror'
 
+            # Raw problem ID
             prob['id'] = problem.get('problemID')
+            # Location of problem
             prob['line'] = problem.get('line')
             prob['charStart'] = problem.get('charStart')
             prob['charEnd'] = problem.get('charEnd')
-            prob['msg'] = problem.find('message').get('value')
+            # Actual problematic code
             prob['context'] = problem.find('source_context').get('value')
+            # Generated error message
+            prob['msg'] = problem.find('message').get('value')
             prob['type'] = problem.get('severity')
-            # print('\t', problem)
-            # print('\t', prob)
+            # Arguments to the error. Parses through each and adds to list
+            arguments = []
+            for argument in problem.find('arguments'):
+                arguments.append(argument.get('value'))
+            prob['arguments'] = arguments
+
+            # Finished parsing information from xml
             error = CompilerError(prob)
             problems.append(error)
-            # problems.append(prob)
-        all_problems += problems
-        # problemsInSrc['problems'] = problems
-        # print('\tproblemsInSrc ', problemsInSrc)
 
-        # all.append(problemsInSrc)
+        all_problems += problems
+
     print(all_problems)
     return all_problems
-
-    # m['status'] = status
-    # m['src'] = all
-    # print('\tm ', m)
-    # return m
-

@@ -24,7 +24,7 @@
     <p>{{ filename }}</p>
     {% if errors is not none %}
       {% for error in errors %}
-        <p>{{ error.get_error() }}{{ error.get_id() }}</p>
+        <p>{{ error.get_error() }}&nbsp;{{ error.get_id() }}</p>
       {% endfor %}
     {% else %}
       <p>No compiler errors found</p>
