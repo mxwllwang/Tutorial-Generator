@@ -121,9 +121,30 @@ def file():
 
 @bp.route('/add', methods=('GET', 'POST'))
 def add():
+    selected_language = ''
+    error_id = int(-1) # java
     if request.method == 'POST':
         establish_user()
-        print ("add")
+        selected_language = request.form['lang']
+        if request.form.get('select'):
+            # Select Language
         
-    return render_template('add.html')
+            if selected_language == 'java':
+                print("Selected Java")
+            else:
+                flash("Language unsupported")
+                
+        elif request.form.get('next'): 
+            # After language has been selected
+            if selected_language == 'java': # Case java
+                error_id = int(request.form['errorID'])
+                print(error_id)
+                
+            # elif other cases here
+            else: # This should not happen
+                flash("Language Unsupported")
+        else:
+            flash("An error occurred")
+        
+    return render_template('add.html', language=selected_language, error=error_id)
             

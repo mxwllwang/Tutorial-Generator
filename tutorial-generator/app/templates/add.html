@@ -1,19 +1,42 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}By File{% endblock %}</h1>
+  <h1>{% block title %}Add Tutorial{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  <form method="post" enctype=multipart/form-data>
+  <form method="post">
     <label for="lang">Language:</label>
-    <select name="lang" id="lang" required>
-      <option value="" disabled selected hidden>File type...</option>
-      <option value="java">Java</option>
-      <option value="python">Python</option>
-      <option value="c++">C++</option>
-      <option value="text">Text</option>
+    <select name="lang" id="lang">
+      {% if language == 'java' %}
+        <option value="java" selected>Java</option>
+        <option value="python">Python</option>
+        <option value="c++">C++</option>
+        <option value="text">Text</option>
+      {% else %}
+        <option value="" disabled selected hidden>File type...</option>
+        <option value="java">Java</option>
+        <option value="python">Python</option>
+        <option value="c++">C++</option>
+        <option value="text">Text</option>
+      {% endif %}
     </select>
-    <label for="
+    <input type="submit" name="select" value="Select">
+    <br>
+    {% if language == 'java' %}
+      <label for="errorID">Java Error ID:</label>
+      {% if error > 0: %}
+        <input type="number" name="errorID" id="errorID" value={{ error }} required>
+      {% else: %}
+        <input type="number" name="errorID" id="errorID" required>
+      {% endif %}
+      <input type="submit" name="next" value="Next">
+      {% if error > 0: %}
+        <br>
+        <label>{{ error }}</label>
+        <p>{x} Parameter, {cxt} Context</p>
+      {% endif %}
+    {% endif %}
+    
   </form>
 {% endblock %}
