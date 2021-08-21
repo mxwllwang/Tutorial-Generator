@@ -30,7 +30,7 @@ def id():
 
         # parse error message to a recognizable format
         db = get_db()
-        selected_row = db.execute('SELECT * FROM tg WHERE error=?', (error_message,)).fetchone()
+        selected_row = db.execute('SELECT * FROM java_errors WHERE id=?', (error_message,)).fetchone()
 
         tutorial = "Default Tutorial"
         error = None # default value of error        
@@ -38,10 +38,12 @@ def id():
             error = 'Input not recognized'
         else:
             tutorial = selected_row['tutorial']
-            print(tutorial)
+            error_msg = selected_row['error']
+            print("Tutorial:", tutorial)
+            print("Error:", error_msg)
 
         if error is None:
-            flash(tutorial, category='warning')
+            flash(error_msg, category='warning')
         else:
             flash(error, category='error')
         
@@ -106,16 +108,7 @@ def file():
             flash('Incorrect file extension')
             return redirect(request.url)
 
-        #db = get_db()
-        #selected_row = db.execute('SELECT * FROM tg WHERE error=?', (error_message,)).fetchone()
-
-        #tutorial = "Default Tutorial"
-        #error = None # default value of error        
-        #if selected_row is None:
-        #    error = 'Input not recognized'
-        #else:
-        #    tutorial = selected_row['tutorial']
-        #    print(tutorial)
+        # db stuff
         
     return render_template('file.html', filename=filename, submitted=submitted, errors=errors)
 
@@ -139,6 +132,25 @@ def add():
             if selected_language == 'java': # Case java
                 error_id = int(request.form['errorID'])
                 print(error_id)
+                ##
+                db = get_db()
+                selected_row = db.execute('SELECT * FROM java_errors WHERE id=?', (error_id,)).fetchone()
+
+                tutorial = "Default Tutorial"
+                error = None # default value of error        
+                if selected_row is None:
+                    error = 'Input not recognized'
+                else:
+                    tutorial = selected_row['tutorial']
+                    error_msg = selected_row['error']
+                    print("Tutorial:", tutorial)
+                    print("Error:", error_msg)
+
+                if error is None:
+                    flash(error_msg, category='warning')
+                else:
+                    flash(error, category='error')
+                ##
                 
             # elif other cases here
             else: # This should not happen
