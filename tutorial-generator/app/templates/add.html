@@ -33,8 +33,10 @@
       <input type="submit" name="next" value="Next">
       {% if error > 0: %}
         <br>
-        <label>{{ error }}</label>
-        <p>{x} Parameter, {cxt} Context</p>
+        <label for="tutorial"> Error #{{error}}: {{ message }} </label>
+        <p>Tutorial key: {x} Parameter, {cxt} Context, {start} Start, {end} End, {ln} Line</p>
+        <input type="text" name="tutorial" id="tutorial">
+        <input type="submit" name="add" value="Add">
       {% endif %}
     {% endif %}
     

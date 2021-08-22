@@ -44,6 +44,7 @@ def id():
 
         if error is None:
             flash(error_msg, category='warning')
+            flash(tutorial)
         else:
             flash(error, category='error')
         
@@ -116,19 +117,18 @@ def file():
 def add():
     selected_language = ''
     error_id = int(-1) # java
+    error_msg = ''
     if request.method == 'POST':
         establish_user()
         selected_language = request.form['lang']
-        if request.form.get('select'):
-            # Select Language
         
+        if request.form.get('select'): # Select Language
             if selected_language == 'java':
                 print("Selected Java")
             else:
                 flash("Language unsupported")
                 
-        elif request.form.get('next'): 
-            # After language has been selected
+        elif request.form.get('next'): # After language has been selected
             if selected_language == 'java': # Case java
                 error_id = int(request.form['errorID'])
                 print(error_id)
@@ -146,17 +146,25 @@ def add():
                     print("Tutorial:", tutorial)
                     print("Error:", error_msg)
 
-                if error is None:
-                    flash(error_msg, category='warning')
-                else:
+                if error is not None:
                     flash(error, category='error')
-                ##
+                
                 
             # elif other cases here
             else: # This should not happen
                 flash("Language Unsupported")
+
+        elif request.form.get('add'):
+            tutorial_msg = request.form['tutorial']
+            if tutorial_msg is not None:            
+                error_id = int(request.form['errorID'])
+                db = get_db()
+                db.execute('UPDATE java_errors SET tutorial =? WHERE id=?', (tutorial_msg, error_id,))
+                print("Update:", tutorial_msg, "", error_id)
+                db.commit()
+                flash("Tutorial Saved")
         else:
             flash("An error occurred")
         
-    return render_template('add.html', language=selected_language, error=error_id)
+    return render_template('add.html', language=selected_language, error=error_id, message=error_msg)
             
