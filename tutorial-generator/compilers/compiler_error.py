@@ -17,7 +17,7 @@ class CompilerError:
 
     # Debugging purposes: print to console and return text representation of error message
     def get_error(self):
-        error = self.id + ' (id): ' + 'On line ' + self.line + ', ' + self.message + ': ' + self.context + ' (' + self.type + ')' 
+        error ='[' + str(self.get_id()) + '] On line ' + self.line + ', from ' + self.start + ' to ' + self.end + ' (' + self.context + ') :: ' + self.message + ' (' + self.type + ')' 
         print (error)
         return error
 
@@ -42,4 +42,9 @@ class CompilerError:
 
     def get_args(self):
         return self.args
+
+    # Get tutorial with filled in arguments from general tutorial template
+    def get_tutorial(tutorial):
+        
+        
     

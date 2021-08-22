@@ -22,9 +22,10 @@
   {% if submitted %}
     <label>Error:</label>
     <p>{{ filename }}</p>
-    {% if errors is not none %}
-      {% for error in errors %}
-        <p>{{ error.get_error() }}&nbsp;{{ error.get_id() }}</p>
+    {% if tutorials is not none %}
+      {% for error in tutorials.keys(): %}
+        <p>Error: {{ error.get_error() }}</p>
+        <p>Tutorial: {{ tutorials[error] }}</p>
       {% endfor %}
     {% else %}
       <p>No compiler errors found</p>

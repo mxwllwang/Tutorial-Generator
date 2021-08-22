@@ -20,6 +20,7 @@ def establish_user():
         print("User already exists", session['user'])
     # app.config['UPLOAD_FOLDER'] = os.path.join('app/uploads', session['user'])
 
+## By ID
 @bp.route('/id', methods=('GET', 'POST'))
 def id():
     if request.method == 'POST':
@@ -53,10 +54,12 @@ def id():
 def allowed_file(filename, extension):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() == extension
 
+## By File
 @bp.route('/file', methods=('GET', 'POST'))
 def file():
     submitted = False
     errors = None # compilerError
+    tutorials = None
     filename = ""
     if request.method == 'POST':
         establish_user()
@@ -98,11 +101,27 @@ def file():
             print('Upload Folder:', os.path.abspath(upload_path))
             file.save(os.path.join(upload_path, filename))
             print("Saved file successfully")
+            
+            ## DOWNLOAD FILE
             if request.form.get('download'):            
                 return redirect(url_for('download_file', location=session['user'], name=filename)) # downloads the file
+            ## GENERATE TUTORIAL
             elif request.form.get('generate'):
+                tutorials = {} # Initialize empty dictionary
                 submitted = True # Change submission status, enabling error and tutorial to be displayed
                 errors = javacompiler.java_compile(filename, upload_path) # Inform Jinja of all the errors
+
+                # parse error message to a recognizable format
+                db = get_db()
+            
+                for error in errors:
+                    tutorial = "No tutorial found"
+                    selected_row = db.execute('SELECT * FROM java_errors WHERE id=?', (error.get_id(),)).fetchone()
+                    if selected_row is not None:
+                        tutorial = selected_row['tutorial']
+                        print("Tutorial -", tutorial)
+                        print("Error -", error.get_error())
+                        tutorials[error] = tutorial
             else:
                 flash('An error occured')
         else:
@@ -111,8 +130,9 @@ def file():
 
         # db stuff
         
-    return render_template('file.html', filename=filename, submitted=submitted, errors=errors)
+    return render_template('file.html', filename=filename, submitted=submitted, errors=errors, tutorials=tutorials)
 
+## Add Tutorials
 @bp.route('/add', methods=('GET', 'POST'))
 def add():
     selected_language = ''
