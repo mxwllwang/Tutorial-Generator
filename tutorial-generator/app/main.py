@@ -113,7 +113,6 @@ def file():
 
                 # parse error message to a recognizable format
                 db = get_db()
-            
                 for error in errors:
                     tutorial = "No tutorial found"
                     selected_row = db.execute('SELECT * FROM java_errors WHERE id=?', (error.get_id(),)).fetchone()
@@ -121,7 +120,7 @@ def file():
                         tutorial = selected_row['tutorial']
                         print("Tutorial -", tutorial)
                         print("Error -", error.get_error())
-                        tutorials[error] = tutorial
+                    tutorials[error] = tutorial
             else:
                 flash('An error occured')
         else:

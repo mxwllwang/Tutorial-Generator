@@ -25,7 +25,7 @@
     {% if tutorials is not none %}
       {% for error in tutorials.keys(): %}
         <p>Error: {{ error.get_error() }}</p>
-        <p>Tutorial: {{ tutorials[error] }}</p>
+        <p>Tutorial: {{ error.get_tutorial(tutorials[error]) }}</p>
       {% endfor %}
     {% else %}
       <p>No compiler errors found</p>

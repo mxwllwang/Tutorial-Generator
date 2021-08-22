@@ -1,4 +1,5 @@
 import sys
+import re
 
 # Represents one error message
 class CompilerError:
@@ -44,7 +45,22 @@ class CompilerError:
         return self.args
 
     # Get tutorial with filled in arguments from general tutorial template
-    def get_tutorial(tutorial):
+    # Tutorial key: $x$ Parameter, $cxt$ Context, $start$ Start, $end$ End, $ln$ Line
+    # Example tutorial: Insert {0} at {end}
+    def get_tutorial(self, tutorial):
+        # Match special indicators
+        tutorial = tutorial.\
+            replace("$cxt$", self.context).\
+            replace("$start$", self.start).\
+            replace("$end$", self.end).\
+            replace("$ln$", self.line)
+        # Match error arguments
+        pattern = re.compile('\$([0-9]+)\$') # TODO: Currently matches numbers such as $234$
+        for indicator in re.findall(pattern, tutorial):
+            print("indicator", indicator)
+            # arg_number = int(indicator.replace("$", ""))
+            tutorial = tutorial.replace('$' + indicator + '$', self.args[int(indicator)])
+        return tutorial
         
         
     
