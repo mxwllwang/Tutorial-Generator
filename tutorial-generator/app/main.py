@@ -48,8 +48,8 @@ def id():
             print("Error:", error_msg)
 
         if error is None:
-            flash(error_msg, category='warning')
-            flash(tutorial)
+            flash("Error: " + error_msg)
+            flash("Tutorial: " + tutorial)
         else:
             flash(error, category='error')
         

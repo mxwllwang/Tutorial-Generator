@@ -3,10 +3,11 @@
 <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 <nav>
   <h2>Tutorial Generator</h2>
+  <hr>
   <ul>
-    <li><a href="{{ url_for('main.id') }}">By ID</a></li>
-    <li><a href="{{ url_for('main.file') }}">By File</a></li>
-    <li><a href="{{ url_for('main.add') }}">Add Tutorials</a></li>   
+    <li><a href="{{ url_for('main.file') }}">Generate</a></li>
+    <li><a href="{{ url_for('main.add') }}">Add</a></li>
+    <li><a href="{{ url_for('main.id') }}">View</a></li>
   </ul>
 </nav>
 <section class="content">

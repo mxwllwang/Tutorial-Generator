@@ -33,7 +33,7 @@ def create_app(test_config=None):
 
     @app.route('/main')
     def home():
-        return render_template('base.html')
+        return redirect('/main/file')
 
     # import database?
     from . import db
