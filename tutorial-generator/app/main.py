@@ -23,6 +23,10 @@ def establish_user():
 ## By ID
 @bp.route('/id', methods=('GET', 'POST'))
 def id():
+    
+    db = get_db() # Get dropdown list for error selection
+    database_errors = db.execute('SELECT id, error FROM java_errors').fetchall() # TODO
+    
     if request.method == 'POST':
         establish_user()
         error_message = "Temporary Error Message"
@@ -49,7 +53,7 @@ def id():
         else:
             flash(error, category='error')
         
-    return render_template('id.html')
+    return render_template('id.html', errors=database_errors)
 
 def allowed_file(filename, extension):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() == extension
@@ -134,6 +138,10 @@ def file():
 ## Add Tutorials
 @bp.route('/add', methods=('GET', 'POST'))
 def add():
+
+    db = get_db() # Get dropdown list for error selection
+    database_errors = db.execute('SELECT id, error FROM java_errors').fetchall() # TODO
+    
     selected_language = ''
     error_id = int(-1) # java
     error_msg = ''
@@ -185,5 +193,5 @@ def add():
         else:
             flash("An error occurred")
         
-    return render_template('add.html', language=selected_language, error=error_id, message=error_msg)
+    return render_template('add.html', language=selected_language, error=error_id, message=error_msg, errors=database_errors)
             

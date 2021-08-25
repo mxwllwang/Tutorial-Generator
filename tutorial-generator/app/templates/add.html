@@ -26,9 +26,20 @@
     {% if language == 'java' %}
       <label for="errorID">Java Error ID:</label>
       {% if error > 0: %}
-        <input type="number" name="errorID" id="errorID" value={{ error }} required>
+        <input list="errors" id="errorID" name="errorID" value={{error}} required/>
+        <datalist id="errors">
+            {% for row in errors: %}
+              <option value={{row['id']}}>{{row['error']}}</option>
+            {% endfor %}
+        </datalist>
       {% else: %}
-        <input type="number" name="errorID" id="errorID" required>
+        <input list="errors" id="errorID" name="errorID" required/>
+        <datalist id="errors">
+          <option value="" disabled selected hidden>Select error</option>
+          {% for row in errors: %}
+            <option value={{row['id']}}>{{row['error']}}</option>
+          {% endfor %}
+        </datalist>
       {% endif %}
       <input type="submit" name="next" value="Next">
       {% if error > 0: %}

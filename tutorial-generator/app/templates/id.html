@@ -7,8 +7,13 @@
 {% block content %}
   <form method="post">
     <label for="error">Error ID:</label>
-    <br>
-    <input type="number" id="error" name="error" required>
+    <input list="errors" id="error" name="error"/>
+    <datalist id="errors">
+      <option value="" disabled selected hidden>Select error</option>
+      {% for row in errors: %}
+        <option value={{row['id']}}>{{row['error']}}</option>
+      {% endfor %}
+    </datalist>
     <input type="submit" value="Generate!">
   </form>
 {% endblock %}
