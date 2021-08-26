@@ -5,11 +5,21 @@ from app.db import get_db
 from compilers.compiler_error import CompilerError
 from compilers import javacompiler
 import uuid
+from flask_ckeditor import CKEditor, CKEditorField
+from flask_wtf import FlaskForm
+from wtforms import TextAreaField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 bp = Blueprint('main', __name__, url_prefix='/main') # Declares blueprint
 
+# Where downloaded files go
 app.config['UPLOAD_FOLDER'] = '../working-folders'
+
+# WYSIWYG editor for writing tutorials
+app.config['CKEDITOR_PKG_TYPE'] = 'full'
+app.config['CKEDITOR_SERVE_LOCAL'] = True
+ckeditor = CKEditor(app)
 
 def establish_user():
     if 'user' not in session:   
@@ -133,7 +143,16 @@ def file():
 
         # db stuff
         
-    return render_template('file.html', filename=filename, submitted=submitted, errors=errors, tutorials=tutorials)
+    return render_template('file.html',
+                           filename=filename,
+                           submitted=submitted,
+                           errors=errors,
+                           tutorials=tutorials)
+
+# CKEditor
+class TutorialForm(FlaskForm):
+    tutorial = CKEditorField('tutorial', validators=[DataRequired()])
+    submit = SubmitField('Add')
 
 ## Add Tutorials
 @bp.route('/add', methods=('GET', 'POST'))
@@ -145,6 +164,9 @@ def add():
     selected_language = ''
     error_id = int(-1) # java
     error_msg = ''
+
+    tutorial_form = TutorialForm()
+    
     if request.method == 'POST':
         establish_user()
         selected_language = request.form['lang']
@@ -168,30 +190,36 @@ def add():
                 if selected_row is None:
                     error = 'Input not recognized'
                 else:
-                    tutorial = selected_row['tutorial']
                     error_msg = selected_row['error']
-                    print("Tutorial:", tutorial)
+                    tutorial = selected_row['tutorial']
                     print("Error:", error_msg)
+                    print("Previous Tutorial:", tutorial)
 
                 if error is not None:
                     flash(error, category='error')
-                
                 
             # elif other cases here
             else: # This should not happen
                 flash("Language Unsupported")
 
-        elif request.form.get('add'):
-            tutorial_msg = request.form['tutorial']
-            if tutorial_msg is not None:            
+        elif tutorial_form.is_submitted():
+            if tutorial_form.validate_on_submit():
+                tutorial_msg = tutorial_form.tutorial.data
                 error_id = int(request.form['errorID'])
                 db = get_db()
                 db.execute('UPDATE java_errors SET tutorial =? WHERE id=?', (tutorial_msg, error_id,))
                 print("Update:", tutorial_msg, "", error_id)
                 db.commit()
                 flash("Tutorial Saved")
+            else:
+                flash("Tutorial Cleared")
         else:
             flash("An error occurred")
         
-    return render_template('add.html', language=selected_language, error=error_id, message=error_msg, errors=database_errors)
+    return render_template('add.html',
+                           language=selected_language,
+                           error=error_id,
+                           message=error_msg,
+                           errors=database_errors,
+                           form=tutorial_form)
             

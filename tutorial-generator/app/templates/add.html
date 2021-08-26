@@ -25,7 +25,7 @@
     <br>
     {% if language == 'java' %}
       <label for="errorID">Java Error ID:</label>
-      {% if error > 0: %}
+      {% if error >= 0: %}
         <input list="errors" id="errorID" name="errorID" value={{error}} required/>
         <datalist id="errors">
             {% for row in errors: %}
@@ -42,14 +42,18 @@
         </datalist>
       {% endif %}
       <input type="submit" name="next" value="Next">
-      {% if error > 0: %}
+      {% if error >= 0: %}
         <br>
         <label for="tutorial"> Error #{{error}}: {{ message }} </label>
         <p>Tutorial key: $x$ Parameter, $cxt$ Context, $start$ Start, $end$ End, $ln$ Line</p>
-        <input type="text" name="tutorial" id="tutorial">
-        <input type="submit" name="add" value="Add">
+        {{ form.csrf_token }}
+        {{ form.tutorial }}
+        {{ form.submit}}
       {% endif %}
     {% endif %}
-    
   </form>
+{% endblock %}
+{% block scripts %}
+  {{ ckeditor.load() }}
+  {{ ckeditor.config(name='tutorial') }}
 {% endblock %}

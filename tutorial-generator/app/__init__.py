@@ -11,6 +11,8 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'), # path of SQLite database file
         UPLOAD_FOLDER='../working-folders' # TODO: Db may not work yet. Will have to rerun flask init-db later
     )
+
+    ##ckeditor.init_app(app)
     
     if test_config is None:
         # load the instance config, if it exists, when not testing
